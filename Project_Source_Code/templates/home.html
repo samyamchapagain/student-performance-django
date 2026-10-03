@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Predict Student Performance{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Student Performance Predictor</h1>
+<p class="subtitle">Enter the student's details below to predict their performance grade.</p>
+
+<div class="card">
+    <form method="post" class="prediction-form">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}
+                    <small class="error-text">{{ error }}</small>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary btn-large">🎯 Predict Grade</button>
+    </form>
+</div>
+
+{% if result %}
+<div class="card result-card">
+    <h2>Prediction Result</h2>
+    <div class="result-display">
+        <div class="result-grade">
+            <span class="label">Predicted Grade</span>
+            <span class="grade-value">{{ result.grade }}</span>
+        </div>
+        <div class="result-level">
+            <span class="label">Performance Level</span>
+            <span class="level-value">{{ result.level }}</span>
+        </div>
+    </div>
+    <p class="result-details">
+        Based on math = {{ result.math }}, reading = {{ result.reading }}, writing = {{ result.writing }}.
+        This prediction has been saved to your history.
+    </p>
+    <a href="{% url 'home' %}" class="btn btn-secondary">Make Another Prediction</a>
+    <a href="{% url 'history' %}" class="btn btn-secondary">View History</a>
+</div>
+{% endif %}
+{% endblock %}

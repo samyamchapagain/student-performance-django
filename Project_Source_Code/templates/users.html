@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Registered Users{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Registered Users</h1>
+<p class="subtitle">All users who have created an account. Each user's username and hashed password are stored in the database.</p>
+
+{% if users %}
+<table class="history-table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>Staff</th>
+            <th>Superuser</th>
+            <th>Predictions Made</th>
+            <th>Date Joined</th>
+            <th>Last Login</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in users %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><span class="badge-user">{{ u.username }}</span></td>
+            <td>{% if u.is_staff %}✅{% else %}—{% endif %}</td>
+            <td>{% if u.is_superuser %}👑{% else %}—{% endif %}</td>
+            <td>{{ u.num_predictions }}</td>
+            <td>{{ u.date_joined|date:"Y-m-d H:i" }}</td>
+            <td>{{ u.last_login|date:"Y-m-d H:i"|default:"Never" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No users have registered yet.</p>
+{% endif %}
+
+<a href="{% url 'home' %}" class="btn btn-secondary">← Back to Predictor</a>
+{% endblock %}

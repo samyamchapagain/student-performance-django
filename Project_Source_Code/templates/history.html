@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction History{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Prediction History</h1>
+{% if is_admin %}
+<p class="subtitle">All predictions from all users are shown below, along with each user's username.</p>
+{% else %}
+<p class="subtitle">These are the predictions made by <strong>{{ user.username }}</strong>. Your history is private to you.</p>
+{% endif %}
+
+{% if predictions %}
+<table class="history-table">
+    <thead>
+        <tr>
+            <th>#</th>
+            {% if is_admin %}<th>User</th>{% endif %}
+            <th>Gender</th>
+            <th>Ethnicity</th>
+            <th>Parental Education</th>
+            <th>Lunch</th>
+            <th>Test Prep</th>
+            <th>Math</th>
+            <th>Reading</th>
+            <th>Writing</th>
+            <th>Grade</th>
+            <th>Level</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in predictions %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            {% if is_admin %}<td><span class="badge-user">{{ p.user.username }}</span></td>{% endif %}
+            <td>{{ p.gender }}</td>
+            <td>{{ p.ethnicity }}</td>
+            <td>{{ p.parental_education }}</td>
+            <td>{{ p.lunch }}</td>
+            <td>{{ p.test_prep_course }}</td>
+            <td>{{ p.math_score }}</td>
+            <td>{{ p.reading_score }}</td>
+            <td>{{ p.writing_score }}</td>
+            <td><span class="badge">{{ p.predicted_grade }}</span></td>
+            <td>{{ p.predicted_level }}</td>
+            <td>{{ p.created_at|date:"Y-m-d H:i" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">No predictions yet. <a href="{% url 'home' %}">Make your first prediction!</a></p>
+{% endif %}
+
+<a href="{% url 'home' %}" class="btn btn-secondary">← Back to Predictor</a>
+{% endblock %}
